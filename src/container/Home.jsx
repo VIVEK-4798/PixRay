@@ -17,16 +17,17 @@ const Home = () => {
   const userInfo = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
 
   useEffect(() => {
+    scrollRef.current.scrollTo(0,0)
+  }, []);
+
+  useEffect(() => {
     const fetchUserData = async () => {
       try {
         if (userInfo?.googleId) { 
-          // Create a reference to the user document in Firestore
           const userDocRef = doc(db, "users", userInfo.googleId);
           
-          // Fetch the document from Firestore
           const userDoc = await getDoc(userDocRef);
 
-          // If the document exists, set the user state with the retrieved data
           if (userDoc.exists()) {
             setUser(userDoc.data());
           } else {

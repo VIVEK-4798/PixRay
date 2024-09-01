@@ -9,13 +9,12 @@ import logo from "../assets/LARGE.jpg";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase/setup";
 
-// Initialize Firestore
 const db = getFirestore();
 
 const Login = () => {
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
-  const auth = getAuth();
+  const auth = getAuth(); 
 
   const handleGoogleSignIn = async () => {
     try {
