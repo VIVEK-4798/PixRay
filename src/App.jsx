@@ -6,14 +6,14 @@ import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
-  const user = JSON.parse(localStorage.getItem('user')); 
+  const user = JSON.parse(localStorage.getItem('user'));
 
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route 
-          path="/*" 
+          path="/" 
           element={
             <ProtectedRoute user={user}>
               <Home />
