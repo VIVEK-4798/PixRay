@@ -8,7 +8,8 @@ import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import { fetchUser } from "../utils/fetchUser";
 
 const Pin = ({ pin }) => {
-  const { postedBy, imageUrl, _id, save, destination, image } = pin;
+  const { postedBy, imageUrl, _id, id, save, destination, image } = pin;
+  const pinId = _id || id; 
   const [postHovered, setPostHovered] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -53,19 +54,19 @@ const Pin = ({ pin }) => {
 
   return (
     <div className="m-2">
-      <div
-        onMouseEnter={() => setPostHovered(true)}
-        onMouseLeave={() => setPostHovered(false)}
-        onClick={() => navigate(`/pin-detail/${_id}`)}
-        className="relative cursor-zoom-in w-auto hover-shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out"
-      >
-        <img
-          className="rounded-lg w-full"
-          alt="user-post"
-          src={loading ? "https://via.placeholder.com/300?text=Loading..." : image}
-          onLoad={() => setLoading(false)}
-          style={{ opacity: loading ? 0.5 : 1, transition: "opacity 0.3s ease-in-out" }}
-        />
+    <Link 
+      to={`/pin-detail/${pinId}`}
+      className="relative cursor-zoom-in w-auto hover-shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out"
+      onMouseEnter={() => setPostHovered(true)}
+      onMouseLeave={() => setPostHovered(false)}
+    >
+      <img
+        className="rounded-lg w-full"
+        alt="user-post"
+        src={loading ? "https://via.placeholder.com/300?text=Loading..." : image}
+        onLoad={() => setLoading(false)}
+        style={{ opacity: loading ? 0.5 : 1, transition: "opacity 0.3s ease-in-out" }}
+      />
 
         {postHovered && (
           <div
@@ -132,7 +133,7 @@ const Pin = ({ pin }) => {
             </div>
           </div>
         )}
-      </div>
+      </Link>
       <div className="flex justify-between mt-2 items-center">
         <Link
           to={`user-profile/${postedBy?._id}`}

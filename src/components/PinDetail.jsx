@@ -88,7 +88,6 @@ const PinDetail = ({user}) => {
 
   if(!pinDetail) return <Spinner message="Loading pin... "/>
 
-
   return (
     <>
     <div className='flex xl:flex-row flex-col m-auto bg-white' style={{maxWidth: '1500px', borderRadius:'32px'}}>
@@ -170,8 +169,6 @@ const PinDetail = ({user}) => {
       </div>
       </div>
     </div>
-
-    {console.log(pins)}
     
     {pins?.length > 0 ? (
       <>
