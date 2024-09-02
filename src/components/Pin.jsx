@@ -23,9 +23,9 @@ const Pin = ({ pin }) => {
       console.error("Required data is missing. Check user and postedBy properties.");
       return;
     }
-  
+
     const pinRef = doc(db, "pins", id);
-  
+
     try {
       await updateDoc(pinRef, {
         save: arrayUnion({
@@ -49,7 +49,7 @@ const Pin = ({ pin }) => {
     } catch (error) {
       console.error("Error deleting pin:", error);
     }
-  };  
+  };
 
   return (
     <div className="m-2">
@@ -133,14 +133,34 @@ const Pin = ({ pin }) => {
           </div>
         )}
       </div>
-      <Link to={`user-profile/${postedBy?._id}`} className="flex gap-2 mt-2 items-center">
-        <img
-          className="w-8 h-8 rounded-full object-cover"
-          src={postedBy?.image || "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="}
-          alt="user-profile"
-        />
-        <p className="font-semibold capitalize">{postedBy?.userName}</p>
-      </Link>
+      <div className="flex justify-between mt-2 items-center">
+        <Link
+          to={`user-profile/${postedBy?._id}`}
+          className="flex gap-2 items-center"
+        >
+          <img
+            className="w-8 h-8 rounded-full object-cover"
+            src={
+              postedBy?.image ||
+              "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
+            }
+            alt="user-profile"
+          />
+          <p className="font-semibold capitalize">{postedBy?.userName}</p>
+        </Link>
+        {postedBy?._id === user.googleId && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              deletePin(_id);
+            }}
+            className="max-sm:block hidden bg-white-500 p-2 opacity-20 hover:opacity-100 text-dark font-bold text-base rounded-3xl hover:shadow-md outline-none"
+          >
+            <AiTwotoneDelete />
+          </button>
+        )}
+      </div>
     </div>
   );
 };
