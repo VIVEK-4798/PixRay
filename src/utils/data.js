@@ -149,16 +149,16 @@ export const feedQuery = async () => {
               postedBy: {
                   _id: data.postedBy._id,
                   userName: data.postedBy.userName,
-                  image: data.postedBy.imageUrl,
+                  image: data.postedBy.image,
               },
               save: Array.isArray(data.save) ? data.save.map((saveItem) => ({
                   _key: saveItem._key,
                   postedBy: saveItem.postedBy ? {
                       _id: saveItem.postedBy._id,
                       userName: saveItem.postedBy.userName,
-                      image: saveItem.postedBy.imageUrl,
+                      image: saveItem.postedBy.image,
                   } : {
-                      _id: 'user123', // Provide a default or handle undefined cases
+                      _id: 'user123', 
                   },
               })) : [],
           });

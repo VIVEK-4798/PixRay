@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { getFirestore, deleteDoc } from "firebase/firestore";
-import { updateDoc, arrayUnion, doc } from "firebase/firestore";
-import { useNavigate, Link, Navigate } from "react-router-dom";
+import { getFirestore, deleteDoc, updateDoc, arrayUnion, doc } from "firebase/firestore";
+import { useNavigate, Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { MdDownloadForOffline } from "react-icons/md";
 import { AiTwotoneDelete } from "react-icons/ai";
@@ -10,15 +9,14 @@ import { fetchUser } from "../utils/fetchUser";
 
 const Pin = ({ pin }) => {
   const { postedBy, imageUrl, _id, save, destination, image } = pin;
-
   const [postHovered, setPostHovered] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const user = fetchUser();
 
   const alreadySaved = !!pin?.save?.filter(
     (item) => item.postedBy._id === user.googleId
   )?.length;
-  
 
   const savePin = async (id) => {
     if (!user || !user.googleId) {
@@ -40,36 +38,35 @@ const Pin = ({ pin }) => {
       console.error("Error saving post: ", error);
     }
   };
-  
-  
 
   const db = getFirestore();
 
   const deletePin = async (id) => {
     try {
       const pinRef = doc(db, "pins", id);
-
       await deleteDoc(pinRef);
-
       window.location.reload();
     } catch (error) {
       console.error("Error deleting pin:", error);
     }
-  };
+  };  
 
   return (
     <div className="m-2">
       <div
-        onMouseEnter={() => {
-          setPostHovered(true);
-        }}
-        onMouseLeave={() => {
-          setPostHovered(false);
-        }}
+        onMouseEnter={() => setPostHovered(true)}
+        onMouseLeave={() => setPostHovered(false)}
         onClick={() => navigate(`/pin-detail/${_id}`)}
         className="relative cursor-zoom-in w-auto hover-shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out"
       >
-        <img className="rounded-lg w-full" alt="user-post" src={image} />
+        <img
+          className="rounded-lg w-full"
+          alt="user-post"
+          src={loading ? "https://via.placeholder.com/300?text=Loading..." : image}
+          onLoad={() => setLoading(false)}
+          style={{ opacity: loading ? 0.5 : 1, transition: "opacity 0.3s ease-in-out" }}
+        />
+
         {postHovered && (
           <div
             className="absolute top-0 w-full h-full flex flex-col justify-between p-1 pr-2 pt-2 pb-2 z-50"
@@ -116,22 +113,22 @@ const Pin = ({ pin }) => {
                 >
                   <BsFillArrowUpRightCircleFill />
                   {destination.length > 15
-                    ? `${destination.slice(0,15)}...`
+                    ? `${destination.slice(0, 15)}...`
                     : destination}
                 </a>
               )}
-                {postedBy?._id === user.googleId && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deletePin(_id);
-                    }}
-                    className="bg-white-500 p-2 opacity-70 hover:opacity-100 text-dark font-bold text-base rounded-3xl hover:shadow-md outline-none"
-                  >
-                    <AiTwotoneDelete/>
-                  </button>
-                )}
+              {postedBy?._id === user.googleId && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deletePin(_id);
+                  }}
+                  className="bg-white-500 p-2 opacity-70 hover:opacity-100 text-dark font-bold text-base rounded-3xl hover:shadow-md outline-none"
+                >
+                  <AiTwotoneDelete />
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -139,7 +136,7 @@ const Pin = ({ pin }) => {
       <Link to={`user-profile/${postedBy?._id}`} className="flex gap-2 mt-2 items-center">
         <img
           className="w-8 h-8 rounded-full object-cover"
-          src={user.imageUrl}
+          src={postedBy?.image || "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="}
           alt="user-profile"
         />
         <p className="font-semibold capitalize">{postedBy?.userName}</p>

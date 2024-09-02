@@ -5,7 +5,8 @@ import { HiMenu } from 'react-icons/hi';
 import { Link, Routes, Route } from 'react-router-dom';
 
 import { Sidebar, UserProfile } from '../components';
-import Pins from './Pins'
+import Pins from './Pins';
+import pin from '../components/Pin';
 import logo from '../assets/LARGE-Black.png';
 import { AiFillCloseCircle } from 'react-icons/ai';
 
@@ -16,9 +17,6 @@ const Home = () => {
 
   const userInfo = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
 
-  useEffect(() => {
-    scrollRef.current.scrollTo(0,0)
-  }, []);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -59,7 +57,7 @@ const Home = () => {
         </Link>
         {user && (
           <Link to={`user-profile/${userInfo.googleId}`}>
-            <img src={user.imageUrl} alt={`${user.name}'s profile`} className='w-28' />
+            <img src={user.imageUrl} alt={`${user.name}'s profile`} className='w-12 rounded-full' />
           </Link>
         )}
         </div>
@@ -75,7 +73,7 @@ const Home = () => {
       <div className='pb-2 flex-1 h-screen overflow-y-scroll' ref={scrollRef}>
         <Routes>
           <Route path='/user-profile/:userId' element={<UserProfile/>}/>
-          <Route path='/*' element={<Pins user={user && user}/>}/>
+          <Route path='/*' element={<Pins user={user && user} pin = {pin}/>}/>
         </Routes>
       </div>
     </div>

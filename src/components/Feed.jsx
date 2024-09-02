@@ -16,16 +16,16 @@ const Feed = () => {
 
         let data;
         if (categoryId) {
-          data = await searchQuery(categoryId); // Ensure searchQuery is implemented correctly
+          data = await searchQuery(categoryId); 
         } else {
-          data = await feedQuery(); // Ensure feedQuery is implemented correctly
+          data = await feedQuery(); 
         }
 
-        setPins(data); // Update state with fetched data
+        setPins(data); 
       } catch (error) {
         console.error("Error fetching pins: ", error);
       } finally {
-        setLoading(false); // Ensure loading state is updated after fetching
+        setLoading(false); 
       }
     };
 
@@ -35,6 +35,9 @@ const Feed = () => {
   if (loading) return <Spinner message="We are adding new ideas to your feed!" />;
 
   if (!pins.length) return <h2>No Pins Available</h2>;
+
+  console.log(pins);
+  
 
   return (
     <div>

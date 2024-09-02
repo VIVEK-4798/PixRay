@@ -10,18 +10,27 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route 
-          path="/" 
-          element={
-            <ProtectedRoute user={user}>
-              <Home />
-            </ProtectedRoute>
-          } 
-        />
-      </Routes>
-    </Router>
+  <Routes>
+    <Route path="/login" element={<Login />} />
+    <Route 
+      path="/home" 
+      element={
+        <ProtectedRoute user={user}>
+          <Home />
+        </ProtectedRoute>
+      } 
+    />
+    <Route 
+      path="/*" 
+      element={
+        <ProtectedRoute user={user}>
+          <Home />
+        </ProtectedRoute>
+      } 
+    />
+  </Routes>
+</Router>
+
   );
 };
 
